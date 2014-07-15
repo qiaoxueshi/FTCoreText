@@ -50,6 +50,7 @@ extern NSString *const FTCoreTextDataAttributes;
 }
 
 @property (nonatomic) NSString *text;
+@property (nonatomic) NSString *sentence;
 @property (nonatomic) NSString *processedString;
 @property (nonatomic, readonly) NSAttributedString *attributedString;
 @property (nonatomic, assign) CGPathRef path;
@@ -62,6 +63,7 @@ extern NSString *const FTCoreTextDataAttributes;
 @property (nonatomic) CGSize shadowOffset;
 @property (nonatomic) BOOL verbose; //default YES
 @property (nonatomic) BOOL highlightTouch; //defaut YES;
+@property (nonatomic) UIColor *selectedTextBackgroundColor;
 
 /* Using this method, you then have to set the -text property to get any result */
 - (id)initWithFrame:(CGRect)frame;

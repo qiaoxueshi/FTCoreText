@@ -1140,6 +1140,23 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
     if ([self superview]) [self setNeedsDisplay];
 }
 
+- (void)setSentence:(NSString *)sentence {
+    NSString *text = [self _addLinkForWordsInSentence:sentence];
+    _sentence = sentence;
+    self.text = text;
+}
+
+- (NSString *)_addLinkForWordsInSentence:(NSString *)sentence {
+    //"\\b([\\w']{2,})\\b", "<_link>http://$1|$1</_link>"
+    NSString *replacePattern = @"\\b([\\w']{2,})\\b";
+    NSString *replaceTemplate = @"<_link>$1|$1</_link>";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:replacePattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSRange stringRange = NSMakeRange(0, sentence.length);
+    NSString *filledString = [regex stringByReplacingMatchesInString:sentence options:NSMatchingReportProgress range:stringRange withTemplate:replaceTemplate];
+    return filledString;
+}
+
+
 - (void)setPath:(CGPathRef)path
 {
     _path = CGPathRetain(path);
@@ -1332,6 +1349,8 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    _selectionsViews = nil;
 	if (self.delegate && [self.delegate respondsToSelector:@selector(coreTextView:receivedTouchOnData:)]) {
 		CGPoint point = [(UITouch *)[touches anyObject] locationInView:self];
 		NSMutableArray *activeRects;
@@ -1340,10 +1359,14 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 			NSMutableArray *selectedViews = [NSMutableArray new];
 			for (NSString *rectString in activeRects) {
 				CGRect rect = CGRectFromString(rectString);
+                rect.size.height += 2;
+                rect.size.width += 2;
+                rect.origin.x -= 1;
+                rect.origin.y -= 1;
 				UIView *view = [[UIView alloc] initWithFrame:rect];
-				view.layer.cornerRadius = 3;
+				view.layer.cornerRadius = 1;
 				view.clipsToBounds = YES;
-				view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
+				view.backgroundColor = self.selectedTextBackgroundColor; //[UIColor colorWithWhite:0 alpha:0.25];
 				[self addSubview:view];
 				[selectedViews addObject:view];
 			}
@@ -1358,8 +1381,8 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	_touchedData = nil;
-	[_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-	_selectionsViews = nil;
+//	[_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+//	_selectionsViews = nil;
 	[super touchesMoved:touches withEvent:event];
 }
 
@@ -1372,8 +1395,8 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 			}
 		}
 		_touchedData = nil;
-		[_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-		_selectionsViews = nil;
+//		[_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+//		_selectionsViews = nil;
 	}
 	[super touchesEnded:touches withEvent:event];
 }
