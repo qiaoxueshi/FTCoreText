@@ -1347,10 +1347,14 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 
 #pragma mark User Interaction
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)deselectAll {
     [_selectionsViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     _selectionsViews = nil;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self deselectAll];
 	if (self.delegate && [self.delegate respondsToSelector:@selector(coreTextView:receivedTouchOnData:)]) {
 		CGPoint point = [(UITouch *)[touches anyObject] locationInView:self];
 		NSMutableArray *activeRects;

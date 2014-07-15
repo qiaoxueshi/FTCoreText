@@ -97,7 +97,7 @@ extern NSString *const FTCoreTextDataAttributes;
 - (NSString *) getTextInLineByRange:(NSRange)range;
 - (NSString *)getNodeIndexThatContainLocationFormNSRange:(NSRange)range;
 
-
+- (void)deselectAll;
 @end
 
 
