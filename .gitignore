@@ -13,7 +13,7 @@ build/*
 .DS_Store
 profile
 .svn
-./idea
+.idea
 
 
 /.DS_Store
