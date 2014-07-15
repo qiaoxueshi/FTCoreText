@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.author       = { "Fuerte International" => "open-source@fuerteint.com" }
   s.platform     = :ios, '3.2'
   s.source       = {
-  	:git => "https://github.com/FuerteInternational/FTCoreText.git",
+  	:git => "https://github.com/qiaoxueshi/FTCoreText.git",
   	:tag => "J1.0.2"
   }
   s.source_files  = 'FTCoreText/*.{h,m}'
